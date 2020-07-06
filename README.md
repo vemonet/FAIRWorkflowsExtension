@@ -99,3 +99,18 @@ pip uninstall FAIRWorkflowsExtension
 
 jupyter labextension uninstall FAIRWorkflowsExtension
 ```
+
+## Install the extension in your Docker image
+
+You can install the FAIRworkflows extension directly in your own JupyterLab Docker image. 
+
+Add the following lines to your `Dockerfile`:
+
+```dockerfile
+RUN pip install git+git://github.com/fair-workflows/FAIRWorkbench@master
+RUN pip install git+git://github.com/fair-workflows/FAIRWorkflowsExtension@master
+RUN git clone https://github.com/fair-workflows/FAIRWorkflowsExtension /root/FAIRWorkflowsExtension
+WORKDIR /root/FAIRWorkflowsExtension
+RUN jupyter-serverextension enable --py FAIRWorkflowsExtension && \
+    jlpm && jlpm build && jupyter-labextension link . && jlpm build && jupyter-lab build
+```
